@@ -74,9 +74,8 @@ export class TeamSpeak extends EventEmitter {
     super()
 
     this.config = {
-      protocol: TeamSpeak.QueryProtocol.RAW,
       host: "127.0.0.1",
-      queryport: config.protocol === TeamSpeak.QueryProtocol.SSH ? 10022 : 10011,
+      queryport: config.queryport || 10011,
       readyTimeout: 10000,
       ignoreQueries: false,
       keepAlive: true,
@@ -211,9 +210,9 @@ export class TeamSpeak extends EventEmitter {
   /** handles initial commands after successfully connecting to a TeamSpeak Server */
   private handleReady() {
     const exec: Promise<any>[] = []
-    if (this.context.login && this.config.protocol === TeamSpeak.QueryProtocol.RAW) {
+    if (this.context.login) {
       exec.push(this.priorize().login(this.context.login.username, this.context.login.password))
-    } else if (this.config.username && this.config.password && this.config.protocol === TeamSpeak.QueryProtocol.RAW) {
+    } else if (this.config.username && this.config.password) {
       exec.push(this.priorize().login(this.config.username, this.config.password))
     }
     if (this.context.selectType !== SelectType.NONE) {
@@ -2510,8 +2509,6 @@ export namespace TeamSpeak {
   export interface ConnectionParams {
     /** the host to connect to (default: 127.0.0.1) */
     host: string,
-    /** the query protocol to use (default: @see QueryProtocol ) */
-    protocol: QueryProtocol,
     /** the queryport to use (default: raw=10011 ssh=10022) */
     queryport: number,
     /** the server to select upon connect (default: none) */
@@ -2536,11 +2533,6 @@ export namespace TeamSpeak {
     autoConnect?: boolean
   }
 
-  export enum QueryProtocol {
-    RAW = "raw",
-    SSH = "ssh"
-  }
 }
 
-export const QueryProtocol = TeamSpeak.QueryProtocol
 export type ConnectionParams = TeamSpeak.ConnectionParams

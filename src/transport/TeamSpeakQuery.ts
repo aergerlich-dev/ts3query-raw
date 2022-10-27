@@ -1,7 +1,6 @@
 import { EventEmitter } from "events"
 import { Command } from "./Command"
 import { ProtocolRAW } from "./protocols/raw"
-import { ProtocolSSH } from "./protocols/ssh"
 
 import { TeamSpeak } from "../TeamSpeak"
 
@@ -59,13 +58,9 @@ export class TeamSpeakQuery extends EventEmitter {
 
   /** returns a constructed Socket */
   static getSocket(config: TeamSpeak.ConnectionParams): TeamSpeakQuery.QueryProtocolInterface {
-    if (config.protocol === TeamSpeak.QueryProtocol.RAW) {
+
       return new ProtocolRAW(config)
-    } else if (config.protocol === TeamSpeak.QueryProtocol.SSH) {
-      return new ProtocolSSH(config)
-    } else {
-      throw new Error("Invalid Protocol given! Expected (\"raw\" or \"ssh\")")
-    }
+ 
   }
 
   /** sends a command to the TeamSpeak Server */

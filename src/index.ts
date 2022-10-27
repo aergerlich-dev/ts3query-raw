@@ -1,6 +1,5 @@
 export {
   TeamSpeak,
-  QueryProtocol,
   ConnectionParams
 } from "./TeamSpeak"
 
